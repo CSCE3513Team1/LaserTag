@@ -34,13 +34,20 @@ public class EntryScreen extends JFrame implements ActionListener
     String team;
     boolean exists;
     Action exit;
-    //Action submit;
+    Action play;
+    Action clearPlayers;
     static String info = "";
+    ArrayList<Player> greenTeam;
+    ArrayList<Player> redTeam;
 
 
     EntryScreen()
     {
         exit = new Exit();
+        play = new Play();
+        clearPlayers = new Clear();
+        greenTeam = new ArrayList<>();
+        redTeam = new ArrayList<>();
         //submit = new Submit();
         gameState = 0;
         startGame = false;
@@ -61,6 +68,11 @@ public class EntryScreen extends JFrame implements ActionListener
 
         iMap.put(KeyStroke.getKeyStroke("F3"), "exit");
         panel.getActionMap().put("exit", exit);
+        iMap.put(KeyStroke.getKeyStroke("F5"), "play");
+        panel.getActionMap().put("play", play);
+        iMap.put(KeyStroke.getKeyStroke("F12"), "clear");
+        panel.getActionMap().put("clear", clearPlayers);
+
         // iMap.put(KeyStroke.getKeyStroke("\t"), "submit");
         // panel.getActionMap().put("submit", submit);
 
@@ -86,19 +98,34 @@ public class EntryScreen extends JFrame implements ActionListener
             gameState = 5;
             update();
         }
-
     }
 
-    // public class Submit extends AbstractAction
-    // {
-    //     @Override
-    //     public void actionPerformed(ActionEvent e)
-    //     {
-    //         System.out.println("tab");
-    //         update();
-    //     }
+    public class Play extends AbstractAction
+    {
+        @Override
+        public void actionPerformed(ActionEvent e)
+        {
+            System.out.println("f5");
+            PlayActionTable game = new PlayActionTable(greenTeam, redTeam);
+        }
+    }
 
-    // }
+    public class Clear extends AbstractAction
+    {
+        @Override
+        public void actionPerformed(ActionEvent e)
+        {
+            System.out.println("f12");
+            System.out.println(redTeam.toString());
+            System.out.println(greenTeam.toString());
+            redTeam.clear();
+            greenTeam.clear();
+            gameState = 0;
+            enterID();
+            System.out.println(redTeam.toString());
+            System.out.println(greenTeam.toString());
+        }
+    }
 
     public void actionPerformed(ActionEvent e)
     {
@@ -205,6 +232,16 @@ public class EntryScreen extends JFrame implements ActionListener
                 }
                 else
                 {
+                    Player player = new Player(this.iD, this.codeName);
+                    if(this.team.toLowerCase().equals("red"))
+                    {
+                        redTeam.add(player);
+                    }
+                    if(this.team.toLowerCase().equals("green"))
+                    {
+                        greenTeam.add(player);
+                    }
+
                     this.gameState = 0;
                     if(exists)
                     {
@@ -212,8 +249,8 @@ public class EntryScreen extends JFrame implements ActionListener
                     }
                     else
                     {
-                        Player newPlayer = new Player(this.iD, this.codeName);
-                        this.database.addPlayer(newPlayer);
+                        //Player newPlayer = new Player(this.iD, this.codeName);
+                        this.database.addPlayer(player);
                     }
                     
                     this.enterID();
