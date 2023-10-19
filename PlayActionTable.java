@@ -19,19 +19,21 @@ public class PlayActionTable {
         frame = new JFrame();
         panel = new JPanel();
         //add players to table
-        String[] columns = {"red_playername", "red_score", "green_playername", "green_score"};
-        String[][] data = new String[team1_players.size() + 1][4];
-        data[0][0] = "Red Team";
-        data[0][1] = "Score";
-        data[0][2] = "Green Team";
-        data[0][3] = "Score";
+        String[] columns = {"red_hit", "red_playername", "red_score", "green_hit", "green_playername", "green_score"};
+        String[][] data = new String[team1_players.size() + 1][6];
+        data[0][0] = "";
+        data[0][1] = "Red Team";
+        data[0][2] = "Score";
+        data[0][3] = "";
+        data[0][4] = "Green Team";
+        data[0][5] = "Score";
         for(int i = 1; i < team1_players.size() + 1; i++){
-            data[i][0] = team1_players.get(i-1).getCodename();
-            data[i][1] = "0";
+            data[i][1] = team1_players.get(i-1).getCodename();
+            data[i][2] = "0";
         }
         for(int i = 1; i < team2_players.size() + 1; i++) {
-            data[i][2] = team2_players.get(i-1).getCodename();
-            data[i][3] = "0";
+            data[i][4] = team2_players.get(i-1).getCodename();
+            data[i][5] = "0";
         }
         table = new JTable(data, columns) {
             public boolean isCellEditable(int row, int column) {                
@@ -53,10 +55,10 @@ public class PlayActionTable {
         //update score
         String score = String.valueOf(intscore);
         if(team == 1){
-            table.setValueAt(score, player + 1, 1);
+            table.setValueAt(score, player + 1, 2);
         }
         else if(team == 2){
-            table.setValueAt(score, player + 1, 3);
+            table.setValueAt(score, player + 1, 5);
         }
     }
 
