@@ -15,8 +15,8 @@ public class SplashScreen extends JWindow {
             BufferedImage originalPhotonImage = ImageIO.read(url);
 
             // Desired width and height for the resized image
-            int photonImageWidth = 1800;
-            int photonImageHeight = 1000;
+            int photonImageWidth = 1500;
+            int photonImageHeight = 750;
 
             // Create a new BufferedImage
             newPhotonImage = new BufferedImage(photonImageWidth, photonImageHeight, BufferedImage.TYPE_INT_ARGB);
