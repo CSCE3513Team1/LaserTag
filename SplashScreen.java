@@ -10,8 +10,12 @@ public class SplashScreen extends JWindow {
 
     public SplashScreen() {
         try {
-            // Load the original image
-            URL url = new URL("https://github.com/jstrother123/photon-main/blob/main/logo.jpg?raw=true");
+            
+            //Pulling images from class Github previous method
+            //URL url = new URL("https://github.com/jstrother123/photon-main/blob/main/logo.jpg?raw=true");
+            
+            // Load the original image from our Github
+            URL url = new URL("https://github.com/CSCE3513Team1/LaserTag/blob/main/Images/logo.jpg?raw=true");
             BufferedImage originalPhotonImage = ImageIO.read(url);
 
             // Desired width and height for the resized image
