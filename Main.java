@@ -1,5 +1,6 @@
 import java.io.IOException;
 import java.lang.String;
+import java.util.ArrayList;
 
 public class Main 
 {
@@ -21,7 +22,9 @@ public class Main
 
 		//Creates an EntryScreen Object
 		EntryScreen entryScreen = new EntryScreen();
-
+		ArrayList<ArrayList<Player>> teams = entryScreen.waitForPlayerEntry();
+		PlayActionTable playActionTable = new PlayActionTable(teams.get(0), teams.get(1));
+		playActionTable.display();
 		
 	}
 

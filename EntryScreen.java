@@ -43,7 +43,7 @@ public class EntryScreen extends JFrame implements ActionListener
 
     EntryScreen()
     {
-        exit = new Exit();
+        //exit = new Exit();
         play = new Play();
         clearPlayers = new Clear();
         greenTeam = new ArrayList<>();
@@ -89,7 +89,7 @@ public class EntryScreen extends JFrame implements ActionListener
         this.enterID();
     }
 
-    public class Exit extends AbstractAction
+    /*public class Exit extends AbstractAction
     {
         @Override
         public void actionPerformed(ActionEvent e)
@@ -98,7 +98,7 @@ public class EntryScreen extends JFrame implements ActionListener
             gameState = 5;
             update();
         }
-    }
+    }*/
 
     public class Play extends AbstractAction
     {
@@ -106,7 +106,7 @@ public class EntryScreen extends JFrame implements ActionListener
         public void actionPerformed(ActionEvent e)
         {
             System.out.println("f5");
-            PlayActionTable game = new PlayActionTable(greenTeam, redTeam);
+            gameState = -1;
         }
     }
 
@@ -335,4 +335,23 @@ public class EntryScreen extends JFrame implements ActionListener
 		// the data.
 		ds.send(DpSend);
 	}
+
+    public ArrayList<ArrayList<Player>> waitForPlayerEntry()
+    {
+        while(gameState != -1)
+        {
+            try
+            {
+                Thread.sleep(1000);
+            }
+            catch(InterruptedException e)
+            {
+                e.printStackTrace();
+            }
+        }
+        ArrayList<ArrayList<Player>> teams = new ArrayList<>();
+        teams.add(redTeam);
+        teams.add(greenTeam);
+        return teams;
+    }
 }
