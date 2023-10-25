@@ -24,8 +24,10 @@ public class GameTimer extends JPanel{
                     label.setText("Countdown: " + getSecondsRemaining() + " seconds");
                 } else {
                     // Countdown has reached zero
-                    label.setText("Time's up!");
+                    //label.setText("Time's up!");
+                    label.setVisible(false);
                     timer.stop(); // Stop the timer when countdown reaches zero
+
                 }
             }
         });
@@ -44,5 +46,16 @@ public class GameTimer extends JPanel{
 	public static void setSecondsRemaining(int secondsRemaining) {
 		GameTimer.secondsRemaining = secondsRemaining;
 	}
+
+    //method to wait for timer to finish
+    public void waitForTimer() {
+        while (secondsRemaining >= 0) {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
     
 }
