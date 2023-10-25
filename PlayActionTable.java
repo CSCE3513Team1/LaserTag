@@ -1,6 +1,7 @@
 import java.awt.*;
 import javax.swing.*;
 import java.util.ArrayList;
+import javax.swing.JFrame;
 
 public class PlayActionTable {
 
@@ -9,6 +10,9 @@ public class PlayActionTable {
     JFrame frame;
     JPanel panel;
     JTable table;
+    private GameTimer gameTimer;
+    
+    
     
     PlayActionTable(ArrayList<Player> team1Players, ArrayList<Player> team2Players){
         this.team1_players = new ArrayList<>(team1Players);
@@ -37,20 +41,32 @@ public class PlayActionTable {
         }
         table = new JTable(data, columns) {
             public boolean isCellEditable(int row, int column) {                
-                return false;               
+                return false; 
+        
             };
         };
+        
+        //Reference to GameTimer
+        gameTimer = new GameTimer();
+        
         //add table to panel
         panel.setLayout(new BorderLayout());
         panel.add(table, BorderLayout.CENTER);
+        //add in GameTimer to the panel on the very bottom
+        panel.add(gameTimer, BorderLayout.SOUTH);
+       
         //add panel to frame
         frame.add(panel);
+        
+        
         //set frame properties
         frame.setSize(550, 200);
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
     }
+    
+    
     public void updateScores(int team, int player, int intscore){
         //update score
         String score = String.valueOf(intscore);
@@ -60,24 +76,5 @@ public class PlayActionTable {
         else if(team == 2){
             table.setValueAt(score, player + 1, 5);
         }
-    }
-
-    public static void main(String[] args) {
-        //generate dummy player list
-        ArrayList<Player> players1 = new ArrayList<Player>();
-        for(int i = 0; i < 4; i++){
-            Player player = new Player(i, "Player " + i);
-            players1.add(player);
-        }
-        ArrayList<Player> players2 = new ArrayList<Player>(players1);
-        PlayActionTable playActionTable = new PlayActionTable(players1, players2);
-        playActionTable.display();
-        //wait
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        playActionTable.updateScores(1, 0, 1);
     }
 }
