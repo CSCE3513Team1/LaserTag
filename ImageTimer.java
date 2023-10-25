@@ -27,6 +27,8 @@ public class ImageTimer extends JWindow {
             currentImageIndex = 0;
             setVisible(true);
 
+            setAlwaysOnTop(true);
+
             // Create a Timer to update the countdown
             Timer timer = new Timer(1000, e -> {
                 if (currentImageIndex < countdownImages.length - 1) {
