@@ -1,73 +1,39 @@
-import java.io.File;
-import java.io.IOException;
-import java.lang.String;
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-import javax.imageio.ImageIO;
-
-import java.awt.image.BufferedImage;
-import java.awt.Graphics;
-
-public class GameTimer 
-{
+public class GameTimer {
+    private static int secondsRemaining = 30; // Initial countdown value
+    private static Timer timer;
+    private static JLabel countdownLabel;
 
 
-	// static BufferedImage loadImage(String filename)
-	// {
-	// 	BufferedImage im = null;
-	// 	try
-	// 	{
-	// 		im = ImageIO.read(new File(filename));
-	// 	} catch (Exception e)
-	// 	{
-	// 		e.printStackTrace(System.err);
-	// 		System.exit(1);
-	// 	}
-	// 	//System.out.println("Successfully loaded " + filename + " image."); Only here for error checking
-	// 	return im;
-	// }
-
-	public static void main(String[] args)
+	public void startCountdown()
 	{
-		Graphics g;
-		BufferedImage[] images;
-		int currentImage;
-		int time = 30;
-		// images = new BufferedImage[30];
-		// images[30] = loadImage(time + ".tif");
-		// int h = images[0].getHeight();
-		// int w = images[0].getWidth();
+		JFrame frame = new JFrame("Text Countdown Example");
+        countdownLabel = new JLabel("Countdown: " + secondsRemaining + " seconds");
 
-		while(time >= 0)
-		{
-			// String filename = time + ".tif";
-			// try{
-			// 	if (images[time] == null)
-			// 		images[time] = loadImage(filename);
-			// 		//ImageIO.read(new File(filename));
-			// }catch(Exception e) 
-			// {
-			// 	e.printStackTrace(System.err);
-			// 	System.exit(1);
-			// }
-			// //Display countdown image for the current time
-			System.out.println(time + " seconds left.");
-			// System.out.println("\n" + filename);
+        // Create a Timer that fires an event every 1000 milliseconds (1 second)
+        timer = new Timer(1000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                secondsRemaining--;
+                if (secondsRemaining >= 0) {
+                    countdownLabel.setText("Countdown: " + secondsRemaining + " seconds");
+                } else {
+                    // Countdown has reached zero
+                    countdownLabel.setText("Time's up!");
+                    timer.stop(); // Stop the timer when countdown reaches zero
+                }
+            }
+        });
 
-			//Do the delay 
-			try 
-			{
-				Thread.sleep(1000);
-			} catch (InterruptedException e)
-			{}
+        // Start the timer
+        timer.start();
 
-			//Decrement the time remaining in the timer.
-			time--;
-		}
+		frame.setLocation(50, 50);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.getContentPane().add(countdownLabel);
+        frame.pack();
+        frame.setVisible(true);
 	}
-}
-
-
-
-
-
-
