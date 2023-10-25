@@ -1,6 +1,8 @@
 import java.awt.*;
 import javax.swing.*;
 import java.util.ArrayList;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.JFrame;
 
 public class PlayActionTable {
@@ -9,8 +11,11 @@ public class PlayActionTable {
     ArrayList<Player> team2_players;
     JFrame frame;
     JPanel panel;
+    JPanel panelTwo;
     JTable table;
     private GameTimer gameTimer;
+    int delay = 1000;
+    int swapOut = 0;
     
     
     
@@ -22,6 +27,7 @@ public class PlayActionTable {
         //create jtable
         frame = new JFrame();
         panel = new JPanel();
+        panelTwo = new JPanel();
         //add players to table
         String[] columns = {"red_hit", "red_playername", "red_score", "green_hit", "green_playername", "green_score"};
         String[][] data = new String[team1_players.size() + 1][6];
@@ -49,21 +55,33 @@ public class PlayActionTable {
         //Reference to GameTimer
         gameTimer = new GameTimer();
         
+        //Gets value of time from GameTimer
+        swapOut = gameTimer.getSecondsRemaining();
+        
         //add table to panel
         panel.setLayout(new BorderLayout());
         panel.add(table, BorderLayout.CENTER);
-        //add in GameTimer to the panel on the very bottom
-        panel.add(gameTimer, BorderLayout.SOUTH);
-       
-        //add panel to frame
-        frame.add(panel);
         
+        //add in GameTimer to the panel
+        panelTwo.add(gameTimer);
+       
+        //add panel to frame 
+        frame.add(panelTwo);
         
         //set frame properties
         frame.setSize(550, 200);
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
+        
+        //gets countdown from GameTimer and when finished swap out
+        //Jpanels from countdown to actionTable
+        try {
+            Thread.sleep(swapOut * delay);    
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        frame.add(panel);
     }
     
     
@@ -77,4 +95,6 @@ public class PlayActionTable {
             table.setValueAt(score, player + 1, 5);
         }
     }
+    
+    
 }
