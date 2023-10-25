@@ -7,12 +7,13 @@ import javax.swing.JPanel;
 public class GameTimer extends JPanel{
     private static int secondsRemaining = 30; // Initial countdown value
     private static Timer timer;
-    private static JLabel countdownLabel;
+    
     
     public GameTimer()
     {
     	
     	//constructor
+    	//adds in Jlabel that will be added to Jpanel
         JLabel label = new JLabel("Countdown: " + secondsRemaining + " seconds");
      // Create a Timer that fires an event every 1000 milliseconds (1 second)
         timer = new Timer(1000, new ActionListener() {
@@ -33,10 +34,5 @@ public class GameTimer extends JPanel{
         timer.start();
         add(label);
     }
-
-	public void startCountdown()
-	{
-		
-        countdownLabel = new JLabel("Countdown: " + secondsRemaining + " seconds");
-        
-	}
+    
+}
