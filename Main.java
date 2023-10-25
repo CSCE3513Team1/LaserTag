@@ -25,6 +25,10 @@ public class Main
 		ArrayList<ArrayList<Player>> teams = entryScreen.waitForPlayerEntry();
 		PlayActionTable playActionTable = new PlayActionTable(teams.get(0), teams.get(1));
 		playActionTable.display();
+
+		//Starts Timer
+		GameTimer countdown = new GameTimer();
+		countdown.startCountdown();
 		
 	}
 
