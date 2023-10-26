@@ -10,7 +10,7 @@ Run:
 
 USAGE INSTRUCTIONS
 -
-To add players, follow the prompts that appear after the splash screen. Once you have finished entering players, hit the f5 key to move to the play action screen.
+To add players, follow the prompts that appear after the splash screen. If you want to clear the players that have been entered, hit the f12 key. Once you have finished entering players, hit the f5 key to move to the play action screen.
 
 TEAM MEMBERS
 -
