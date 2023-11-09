@@ -4,20 +4,27 @@ import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JFrame;
+import javax.swing.table.TableCellRenderer;
 
 public class PlayActionTable {
 
     ArrayList<Player> team1_players;
     ArrayList<Player> team2_players;
     ArrayList<String> log;
+    int table_size;
+    //int log_start;
+    static int LOG_SIZE = 5;
     JFrame frame;
     JPanel panel;
     JPanel panelTwo;
     JTable table;
+    static int ROW_HEIGHT = 15;
+    JTextArea log_text;
     private GameTimer gameTimer;
     int delay = 1000;
     int swapOut = 0;
-    static int SCORE_INCREMENT = 10;
+    static int HIT_SCORE_INCREMENT = 10;
+    static int BASE_SCORE_INCREMENT = 100;
     
     
     
@@ -33,8 +40,12 @@ public class PlayActionTable {
         panel = new JPanel();
         panelTwo = new JPanel();
         //add players to table
+
+        table_size = Math.max(team1_players.size(), team2_players.size()) + 1;
+        //log_start = team_size + 2;
+        //table_size = team_size + 2 + LOG_SIZE;
         String[] columns = {"red_hit", "red_playername", "red_score", "green_hit", "green_playername", "green_score"};
-        String[][] data = new String[team1_players.size() + 1][6];
+        String[][] data = new String[table_size][6];
         data[0][0] = "";
         data[0][1] = "Red Team";
         data[0][2] = "Score";
@@ -55,6 +66,16 @@ public class PlayActionTable {
         
             };
         };
+        table.setRowHeight(ROW_HEIGHT);
+        //make an empty log area
+        log_text = new JTextArea();
+        log_text.setEditable(false);
+        log_text.setLineWrap(true);
+        log_text.setWrapStyleWord(true);
+        log_text.setFont(new Font("Serif", Font.PLAIN, 10));
+        for(int i = 0; i < LOG_SIZE; i++){
+            log_text.append("\n");
+        }
         
         //Reference to GameTimer
         gameTimer = new GameTimer();
@@ -65,6 +86,7 @@ public class PlayActionTable {
         //add table to panel
         panel.setLayout(new BorderLayout());
         panel.add(table, BorderLayout.CENTER);
+        panel.add(log_text, BorderLayout.SOUTH);
         
         //add in GameTimer to the panel
         panelTwo.add(gameTimer);
@@ -73,7 +95,9 @@ public class PlayActionTable {
         frame.add(panelTwo);
         
         //set frame properties
-        frame.setSize(550, 200);
+        //frame.setSize(550, 200);
+        //determine framze size by the number of players
+        frame.setSize(550, 130 + (table_size * 15));
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
@@ -126,13 +150,12 @@ public class PlayActionTable {
         }
         log.add(attacker.getCodename() + " hit " + defender.getCodename());
         int score = attacker.getScore();
-        score += SCORE_INCREMENT;
+        score += HIT_SCORE_INCREMENT;
         attacker.setScore(score);
     }
 
     //Use this whenever a player hits the base
     public void playerHitBase(int attacker_id){
-        //unsure how many points this is worth, leaving it empty for now
         Player attacker = null;
         for(int i = 0; i < team1_players.size(); i++){
             if(team1_players.get(i).getId() == attacker_id){
@@ -145,6 +168,8 @@ public class PlayActionTable {
             }
         }
         attacker.setHitBase(true);
+        attacker.setScore(attacker.getScore() + BASE_SCORE_INCREMENT);
+        log.add(attacker.getCodename() + " hit the base");
     }
 
     public void sortByScore(){
@@ -155,9 +180,10 @@ public class PlayActionTable {
     //Use this within a clock cycle to update the display
     public void updateDisplay(){
         //update table
+        //this code should probably be cleaned to use the same table instead of making a new one, but it was easier to copy paste
         this.sortByScore();
         String[] columns = {"red_hit", "red_playername", "red_score", "green_hit", "green_playername", "green_score"};
-        String[][] data = new String[team1_players.size() + 1][6];
+        String[][] data = new String[table_size][6];
         data[0][0] = "";
         data[0][1] = "Red Team";
         data[0][2] = "Score";
@@ -184,8 +210,35 @@ public class PlayActionTable {
             data[i][4] = team2_players.get(i-1).getCodename();
             data[i][5] = String.valueOf(team2_players.get(i-1).getScore());
         }
-        table = new JTable(data, columns);
-        panel.add(table);
+
+        table = new JTable(data, columns) {
+            public boolean isCellEditable(int row, int column) {                
+                return false; 
+            };
+        };
+        table.setRowHeight(ROW_HEIGHT);
+        
+
+        log_text.setText("");
+        int log_start_index = log.size() - LOG_SIZE;
+        if (log_start_index < 0) {
+            log_start_index = 0;
+        }
+        //if less than LOG_SIZE lines, add blank lines
+        for(int i = 0; i < LOG_SIZE - log.size(); i++){
+            log_text.append("\n");
+        }
+        for(int i = log_start_index; i < log.size(); i++){
+            log_text.append(log.get(i) + "\n");
+        }
+
+        panel.removeAll();
+        panel.setLayout(new BorderLayout());
+        panel.add(table, BorderLayout.CENTER);
+        panel.add(log_text, BorderLayout.SOUTH);
+        panel.revalidate();
+        panel.repaint();
+
     }
 
     
@@ -205,6 +258,18 @@ public class PlayActionTable {
         playActionTable.playerHitPlayer(4, 7);
         playActionTable.playerHitBase(2);
         playActionTable.updateDisplay();
+        //wait, then have a random player hit a random player, seven times
+        for(int i = 0; i < 7; i++){
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            int attacker = (int)(Math.random() * 10);
+            int defender = (int)(Math.random() * 10);
+            playActionTable.playerHitPlayer(attacker, defender);
+            playActionTable.updateDisplay();
+        }
     }*/
 
 }
