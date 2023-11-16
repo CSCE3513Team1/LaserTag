@@ -21,6 +21,7 @@ public class PlayActionTable {
     int swapOut = 0;
     static int HIT_SCORE_INCREMENT = 10;
     static int BASE_SCORE_INCREMENT = 100;
+    GameMusic gameMusic;
     
     
     
@@ -109,6 +110,7 @@ public class PlayActionTable {
             e.printStackTrace();
         }
         gameTimer = new GameTimer(360, "Time Remaining: ", "Time's Up!");
+        gameMusic = new GameMusic();
         
     }
     
