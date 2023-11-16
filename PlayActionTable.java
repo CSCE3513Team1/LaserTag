@@ -169,6 +169,9 @@ public class PlayActionTable {
                 attacker = team2_players.get(i);
             }
         }
+        if (attacker == null) {
+            return;
+        }
         attacker.setHitBase(true);
         attacker.setScore(attacker.getScore() + BASE_SCORE_INCREMENT);
         log.add(attacker.getCodename() + " hit the base!");
