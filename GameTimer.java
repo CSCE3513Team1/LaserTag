@@ -5,29 +5,32 @@ import javax.swing.JPanel;
 
 
 public class GameTimer extends JPanel{
-    private static int secondsRemaining = 3; // Initial countdown value
+    private static int secondsRemaining; // Initial countdown value
     private static Timer timer;
+    private static String prefix;
+    private static String endDisplay;
     
     
-    public GameTimer()
+    public GameTimer(int timerSeconds, String Prefix, String EndDisplay)
     {
+        endDisplay = EndDisplay;
+        prefix = Prefix;
+        secondsRemaining = timerSeconds;
     	
     	//constructor
     	//adds in Jlabel that will be added to Jpanel
-        JLabel label = new JLabel("Countdown: " + getSecondsRemaining() + " seconds");
+        JLabel label = new JLabel(CountdownLabel());
      // Create a Timer that fires an event every 1000 milliseconds (1 second)
         timer = new Timer(1000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 setSecondsRemaining(getSecondsRemaining() - 1);
-                if (getSecondsRemaining() >= 0) {
-                    label.setText("Countdown: " + getSecondsRemaining() + " seconds");
+                if (getSecondsRemaining() > 0) {
+                    label.setText(CountdownLabel());
                 } else {
                     // Countdown has reached zero
-                    //label.setText("Time's up!");
-                    label.setVisible(false);
+                    label.setText(endDisplay);
                     timer.stop(); // Stop the timer when countdown reaches zero
-
                 }
             }
         });
@@ -47,9 +50,17 @@ public class GameTimer extends JPanel{
 		GameTimer.secondsRemaining = secondsRemaining;
 	}
 
+    private String CountdownLabel() {
+        //if over a minute, display minutes and seconds
+        if (getSecondsRemaining() > 60) {
+            return prefix + getSecondsRemaining() / 60 + " minutes " + getSecondsRemaining() % 60 + " seconds";
+        }
+        return prefix + getSecondsRemaining() + " seconds";
+    }
+
     //method to wait for timer to finish
     public void waitForTimer() {
-        while (secondsRemaining >= 0) {
+        while (secondsRemaining > 0) {
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {

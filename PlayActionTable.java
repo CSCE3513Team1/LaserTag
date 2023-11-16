@@ -1,10 +1,8 @@
 import java.awt.*;
 import javax.swing.*;
 import java.util.ArrayList;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import javax.swing.JFrame;
-import javax.swing.table.TableCellRenderer;
+
 
 public class PlayActionTable {
 
@@ -12,11 +10,9 @@ public class PlayActionTable {
     ArrayList<Player> team2_players;
     ArrayList<String> log;
     int table_size;
-    //int log_start;
     static int LOG_SIZE = 5;
     JFrame frame;
     JPanel panel;
-    JPanel panelTwo;
     JTable table;
     static int ROW_HEIGHT = 15;
     JTextArea log_text;
@@ -38,7 +34,7 @@ public class PlayActionTable {
         //create jtable
         frame = new JFrame();
         panel = new JPanel();
-        panelTwo = new JPanel();
+        gameTimer = null;
         //add players to table
 
         table_size = Math.max(team1_players.size(), team2_players.size()) + 1;
@@ -78,26 +74,29 @@ public class PlayActionTable {
         }
         
         //Reference to GameTimer
-        gameTimer = new GameTimer();
+        GameTimer startTimer = new GameTimer(3, "Game Starts In: ", "Start!");
         
         //Gets value of time from GameTimer
-        swapOut = gameTimer.getSecondsRemaining();
+        swapOut = startTimer.getSecondsRemaining() + 1;
         
         //add table to panel
         panel.setLayout(new BorderLayout());
+        panel.add(startTimer, BorderLayout.NORTH);
         panel.add(table, BorderLayout.CENTER);
         panel.add(log_text, BorderLayout.SOUTH);
+
+        frame.add(panel);
         
         //add in GameTimer to the panel
-        panelTwo.add(gameTimer);
+        //panelTwo.add(gameTimer);
        
         //add panel to frame 
-        frame.add(panelTwo);
+        //frame.add(panelTwo);
         
         //set frame properties
         //frame.setSize(550, 200);
         //determine framze size by the number of players
-        frame.setSize(550, 130 + (table_size * 15));
+        frame.setSize(550, 160 + (table_size * 15));
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
@@ -109,7 +108,8 @@ public class PlayActionTable {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        frame.add(panel);
+        gameTimer = new GameTimer(360, "Time Remaining: ", "Time's Up!");
+        
     }
     
     
@@ -148,7 +148,7 @@ public class PlayActionTable {
         if (attacker == null || defender == null) {
             return;
         }
-        log.add(attacker.getCodename() + " hit " + defender.getCodename());
+        log.add(attacker.getCodename() + " hit " + defender.getCodename() + "!");
         int score = attacker.getScore();
         score += HIT_SCORE_INCREMENT;
         attacker.setScore(score);
@@ -169,7 +169,7 @@ public class PlayActionTable {
         }
         attacker.setHitBase(true);
         attacker.setScore(attacker.getScore() + BASE_SCORE_INCREMENT);
-        log.add(attacker.getCodename() + " hit the base");
+        log.add(attacker.getCodename() + " hit the base!");
     }
 
     public void sortByScore(){
@@ -177,10 +177,10 @@ public class PlayActionTable {
         this.team2_players.sort((p1, p2) -> p2.getScore() - p1.getScore());
     }
 
-    //Use this within a clock cycle to update the display
+    //Use this within a clock cycle to update the display. This is most likely pretty inefficient and slow
     public void updateDisplay(){
         //update table
-        //this code should probably be cleaned to use the same table instead of making a new one, but it was easier to copy paste
+        //this code should probably be cleaned to use the same table eventually instead of making a new one every update
         this.sortByScore();
         String[] columns = {"red_hit", "red_playername", "red_score", "green_hit", "green_playername", "green_score"};
         String[][] data = new String[table_size][6];
@@ -232,8 +232,10 @@ public class PlayActionTable {
             log_text.append(log.get(i) + "\n");
         }
 
+
         panel.removeAll();
         panel.setLayout(new BorderLayout());
+        panel.add(gameTimer, BorderLayout.NORTH);
         panel.add(table, BorderLayout.CENTER);
         panel.add(log_text, BorderLayout.SOUTH);
         panel.revalidate();
