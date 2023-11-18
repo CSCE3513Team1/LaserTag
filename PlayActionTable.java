@@ -1,4 +1,6 @@
 import java.awt.*;
+import java.io.IOException;
+
 import javax.swing.*;
 import java.util.ArrayList;
 import javax.swing.JFrame;
@@ -22,8 +24,7 @@ public class PlayActionTable {
     static int HIT_SCORE_INCREMENT = 10;
     static int BASE_SCORE_INCREMENT = 100;
     GameMusic gameMusic;
-    
-    
+    udpBaseClient_2 baseClient;
     
     PlayActionTable(ArrayList<Player> team1Players, ArrayList<Player> team2Players){
         this.team1_players = new ArrayList<>(team1Players);
@@ -63,6 +64,7 @@ public class PlayActionTable {
         
             };
         };
+        
         table.setRowHeight(ROW_HEIGHT);
         //make an empty log area
         log_text = new JTextArea();
@@ -109,7 +111,9 @@ public class PlayActionTable {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        gameTimer = new GameTimer(360, "Time Remaining: ", "Time's Up!");
+        
+        
+        gameTimer = new GameTimer(30, "Time Remaining: ", "Time's Up!");
         gameMusic = new GameMusic();
         
     }
@@ -127,7 +131,7 @@ public class PlayActionTable {
     }
 
     //Use this whenever a player hits a player. Make sure to pass in player IDs
-    public void playerHitPlayer(int attacker_id, int defender_id){
+    public void playerHitPlayer(int attacker_id, int defender_id) throws IOException{
         //update score
         Player attacker = null;
         Player defender = null;
@@ -151,13 +155,16 @@ public class PlayActionTable {
             return;
         }
         log.add(attacker.getCodename() + " hit " + defender.getCodename() + "!");
+        //Temporary Name
+        String tempName = (attacker.getCodename() + " hit " + defender.getCodename() + "!");
+        baseClient = new udpBaseClient_2(tempName);
         int score = attacker.getScore();
         score += HIT_SCORE_INCREMENT;
         attacker.setScore(score);
     }
 
     //Use this whenever a player hits the base
-    public void playerHitBase(int attacker_id){
+    public void playerHitBase(int attacker_id) throws IOException{
         Player attacker = null;
         for(int i = 0; i < team1_players.size(); i++){
             if(team1_players.get(i).getId() == attacker_id){
@@ -169,12 +176,13 @@ public class PlayActionTable {
                 attacker = team2_players.get(i);
             }
         }
-        if (attacker == null) {
-            return;
-        }
         attacker.setHitBase(true);
         attacker.setScore(attacker.getScore() + BASE_SCORE_INCREMENT);
+        
         log.add(attacker.getCodename() + " hit the base!");
+        String tempNameTwo = (attacker.getCodename() + " hit the base!");
+        //Temporary Name
+        baseClient = new udpBaseClient_2(tempNameTwo);
     }
 
     public void sortByScore(){
@@ -237,7 +245,6 @@ public class PlayActionTable {
             log_text.append(log.get(i) + "\n");
         }
 
-
         panel.removeAll();
         panel.setLayout(new BorderLayout());
         panel.add(gameTimer, BorderLayout.NORTH);
@@ -247,6 +254,8 @@ public class PlayActionTable {
         panel.repaint();
 
     }
+
+	
 
     
     //test
