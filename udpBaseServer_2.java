@@ -22,9 +22,10 @@ public class udpBaseServer_2
 			// Step 2 : create a DatgramPacket to receive the data.
 			DpReceive = new DatagramPacket(receive, receive.length);
 
-			// Step 3 : revieve the data in byte buffer.
+			// Step 3 : receive the data in byte buffer.
 			ds.receive(DpReceive);
-			
+
+			//prints data in the byte buffer.
 			System.out.println("Client:-" + data(receive));
 			
 			// Exit the server if the client sends "bye"
