@@ -7,11 +7,16 @@ public class GameAction {
 	
 	GameAction() throws IOException
 	{
+		//Creates a EntryScreen Object
 		EntryScreen entryScreen = new EntryScreen();
+		//Creates an ArrayList of Players for each team
 		ArrayList<ArrayList<Player>> teams = entryScreen.waitForPlayerEntry();
+		//Creats playActionTable Object and Puts entryScreen Team inside the playActionTable
 		PlayActionTable playActionTable = new PlayActionTable(teams.get(0), teams.get(1));
+		//Displays playActionTable
 		playActionTable.display();
-		//test playerHitPlayer
+		/*
+		//test playerHitPlayer and PlayerHitbase
 		playActionTable.playerHitPlayer(1, 2);
 		playActionTable.playerHitBase(2);
 		playActionTable.updateDisplay();
@@ -30,5 +35,6 @@ public class GameAction {
             System.out.println("This is defenders: " + defender);
             playActionTable.updateDisplay();
         } 
+        */
 	}
 }
