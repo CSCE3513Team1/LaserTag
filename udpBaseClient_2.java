@@ -24,7 +24,7 @@ public class udpBaseClient_2
 		System.out.println("transmit");
 				
 		String inp = info;
-		System.out.println("This is inp in Client: " + info);
+		//System.out.println("This is inp in Client: " + info);
 		//System.out.println("This is inp: " + inp);
 		// convert the String input into the byte array.
 		//buf = ByteBuffer.allocate(Integer.BYTES).putInt(inp).array();
