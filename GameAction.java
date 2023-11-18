@@ -31,20 +31,4 @@ public class GameAction {
             playActionTable.updateDisplay();
         } 
 	}
-	
-	//test
-    /*
-        //wait, then have a random player hit a random player, seven times
-        for(int i = 0; i < 7; i++){
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            int attacker = (int)(Math.random() * 10);
-            int defender = (int)(Math.random() * 10);
-            playActionTable.playerHitPlayer(attacker, defender);
-            playActionTable.updateDisplay();
-        }
-    }*/
 }
