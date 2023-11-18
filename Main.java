@@ -1,14 +1,15 @@
 import java.io.IOException;
 import java.lang.String;
 import java.util.ArrayList;
+import javax.swing.SwingUtilities;
 
 public class Main 
 {
 	public static void main(String[] args) throws IOException
 	{
-        //Connect to the server
-		//udpBaseServer_2.baseServer();
-
+		//Make sure to run updBaseServer_2.java first before main program
+		// to see udp working along side main program.
+		
 		//Create a SplashScreen Object
 		SplashScreen splashScreen = new SplashScreen();
 
@@ -19,14 +20,7 @@ public class Main
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
-		//Creates an EntryScreen Object
-		EntryScreen entryScreen = new EntryScreen();
-		ArrayList<ArrayList<Player>> teams = entryScreen.waitForPlayerEntry();
-		PlayActionTable playActionTable = new PlayActionTable(teams.get(0), teams.get(1));
-		playActionTable.display();
-		
+		//Creates a GameAction Object
+		GameAction gameAction = new GameAction();
 	}
-
-
 }
