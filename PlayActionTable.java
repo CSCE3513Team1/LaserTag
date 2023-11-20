@@ -23,7 +23,7 @@ public class PlayActionTable {
     int swapOut = 0;
     static int HIT_SCORE_INCREMENT = 10;
     static int BASE_SCORE_INCREMENT = 100;
-    GameMusic gameMusic;
+    
     udpBaseClient_2 baseClient;
     
     PlayActionTable(ArrayList<Player> team1Players, ArrayList<Player> team2Players){
@@ -114,7 +114,9 @@ public class PlayActionTable {
         
         
         gameTimer = new GameTimer(30, "Time Remaining: ", "Time's Up!");
-        gameMusic = new GameMusic();
+	//updated way to play music by calling the method in the the GameMusic class
+        GameMusic gameMusic = new GameMusic();
+	gameMusic.playRandomTrack();
         
     }
     
