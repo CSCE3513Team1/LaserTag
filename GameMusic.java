@@ -5,60 +5,56 @@ import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.Random;
 
 public class GameMusic {
-    public static void main(String[] args) {
-        final Player[] player = {null}; // Declare as final array
+    private Player player;
 
+    public void playRandomTrack() {
         // random number between 1-8
-        int randomNumber = new Random().nextInt(8) + 1;
+        int randomNumber = (int) (Math.random() * 8) + 1;
 
-        // get the mp3 from github with a randomized track number
         String mp3Source = "https://github.com/CSCE3513Team1/LaserTag/raw/main/Images/Track0" + randomNumber + ".mp3";
 
         try {
             URLConnection urlConnection = new URL(mp3Source).openConnection();
             urlConnection.connect();
             BufferedInputStream bis = new BufferedInputStream(urlConnection.getInputStream());
-            player[0] = new Player(bis);
+            player = new Player(bis);
 
-            // Start a new thread for playback
+            // Start a new thread for music
             Thread playerThread = new Thread(() -> {
                 try {
-                    player[0].play();
+                    player.play();
                 } catch (JavaLayerException e) {
                     System.out.println(e.getMessage());
                 }
             });
             playerThread.start();
 
-            // Sleep for 5 seconds
+            // Sleep for 5 seconds if needed)
             try {
                 Thread.sleep(5000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
 
-            // Close resources and exit
-            closeResources(player[0], bis);
-            System.exit(0);
+            // close player
+            closeResources();
 
         } catch (IOException | JavaLayerException e) {
             System.out.println(e.getMessage());
         }
     }
-    //close buffered input stream and Player
-    private static void closeResources(Player player, BufferedInputStream bis) {
-        try {
-            if (player != null) {
+
+    private void closeResources() {
+        //says the try catch is unreachable and freezes for some reason
+        //try {
+            //if (player != null) 
+            //{
                 player.close();
-            }
-            if (bis != null) {
-                bis.close();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+           // }
+        //} catch (IOException e) {
+           // e.printStackTrace();
+        //}
     }
 }
