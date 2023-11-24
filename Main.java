@@ -22,5 +22,8 @@ public class Main
         }
 		//Creates a GameAction Object
 		GameAction gameAction = new GameAction();
+
+		//Creates an EndGame Object that creates the button to send you back to the Player Entry Screen
+		EndGame endGame = new EngGame();
 	}
 }
