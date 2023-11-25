@@ -21,6 +21,6 @@ public class Main
             e.printStackTrace();
         }
 		//Creates a GameAction Object
-		GameAction gameAction = new GameAction();
+		GameAction.RunGame();
 	}
 }

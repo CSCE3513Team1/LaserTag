@@ -15,6 +15,8 @@ public class GameMusic {
 
         String mp3Source = "https://github.com/CSCE3513Team1/LaserTag/raw/main/Images/Track0" + randomNumber + ".mp3";
 
+        System.out.println("Playing: " + mp3Source);
+
         try {
             URLConnection urlConnection = new URL(mp3Source).openConnection();
             urlConnection.connect();
@@ -32,14 +34,14 @@ public class GameMusic {
             playerThread.start();
 
             // Sleep for 5 seconds if needed)
-            try {
+            /*try {
                 Thread.sleep(5000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
-            }
+            }*/
 
             // close player
-            closeResources();
+            //closeResources();
 
         } catch (IOException | JavaLayerException e) {
             System.out.println(e.getMessage());

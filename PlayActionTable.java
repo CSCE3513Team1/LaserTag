@@ -1,6 +1,7 @@
 import java.awt.*;
 import java.io.IOException;
-
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.*;
 import java.util.ArrayList;
 import javax.swing.JFrame;
@@ -23,8 +24,12 @@ public class PlayActionTable {
     int swapOut = 0;
     static int HIT_SCORE_INCREMENT = 10;
     static int BASE_SCORE_INCREMENT = 100;
-    
-    udpBaseClient_2 baseClient;
+    GameMusic gameMusic;
+    Timer flashingTimer;
+    int topRedScore = -1;
+    int topGreenScore = -1;
+    boolean flashOn = true;
+    UDPSender baseClient;
     
     PlayActionTable(ArrayList<Player> team1Players, ArrayList<Player> team2Players){
         this.team1_players = new ArrayList<>(team1Players);
@@ -34,6 +39,8 @@ public class PlayActionTable {
 
     public void display(){
         //create jtable
+        gameMusic = new GameMusic();
+	    gameMusic.playRandomTrack();
         frame = new JFrame();
         panel = new JPanel();
         gameTimer = null;
@@ -77,7 +84,8 @@ public class PlayActionTable {
         }
         
         //Reference to GameTimer
-        GameTimer startTimer = new GameTimer(3, "Game Starts In: ", "Start!");
+        GameTimer startTimer = new GameTimer(18, "Game Starts In: ", "Start!");
+        //GameTimer startTimer = new GameTimer(3, "Game Starts In: ", "Start!");
         
         //Gets value of time from GameTimer
         swapOut = startTimer.getSecondsRemaining() + 1;
@@ -111,13 +119,18 @@ public class PlayActionTable {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
+        //set up the top score on each team to flash
+        flashingTimer = new Timer(100, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                flashScores();
+            }
+        });
+        flashingTimer.start();
         
-        
-        gameTimer = new GameTimer(30, "Time Remaining: ", "Time's Up!");
-	//updated way to play music by calling the method in the the GameMusic class
-        GameMusic gameMusic = new GameMusic();
-	gameMusic.playRandomTrack();
-        
+        gameTimer = new GameTimer(360, "Time Remaining: ", "Time's Up!");
+        //gameTimer = new GameTimer(30, "Time Remaining: ", "Time's Up!");
     }
     
     
@@ -132,24 +145,46 @@ public class PlayActionTable {
         }
     }
 
+    public void flashScores(){
+        if (team1_players.size() > 0) {
+            if (team1_players.get(0).getScore() > topRedScore) {
+                topRedScore = team1_players.get(0).getScore();
+            }
+        }
+        if (team2_players.size() > 0) {
+            if (team2_players.get(0).getScore() > topGreenScore) {
+                topGreenScore = team2_players.get(0).getScore();
+            }
+        }
+        flashOn = !flashOn;
+        if (flashOn){
+            table.setValueAt(String.valueOf(topRedScore), 1, 2);
+            table.setValueAt(String.valueOf(topGreenScore), 1, 5);
+        }
+        else {
+            table.setValueAt("", 1, 2);
+            table.setValueAt("", 1, 5);
+        }
+    }
+
     //Use this whenever a player hits a player. Make sure to pass in player IDs
-    public void playerHitPlayer(int attacker_id, int defender_id) throws IOException{
+    public void playerHitPlayer(int attacker_id, int defender_id){
         //update score
         Player attacker = null;
         Player defender = null;
         for(int i = 0; i < team1_players.size(); i++){
-            if(team1_players.get(i).getId() == attacker_id){
+            if(team1_players.get(i).getEquipID() == attacker_id){
                 attacker = team1_players.get(i);
             }
-            if(team1_players.get(i).getId() == defender_id){
+            if(team1_players.get(i).getEquipID() == defender_id){
                 defender = team1_players.get(i);
             }
         }
         for(int i = 0; i < team2_players.size(); i++){
-            if(team2_players.get(i).getId() == attacker_id){
+            if(team2_players.get(i).getEquipID() == attacker_id){
                 attacker = team2_players.get(i);
             }
-            if(team2_players.get(i).getId() == defender_id){
+            if(team2_players.get(i).getEquipID() == defender_id){
                 defender = team2_players.get(i);
             }
         }
@@ -158,23 +193,24 @@ public class PlayActionTable {
         }
         log.add(attacker.getCodename() + " hit " + defender.getCodename() + "!");
         //Temporary Name
-        String tempName = (attacker.getCodename() + " hit " + defender.getCodename() + "!");
-        baseClient = new udpBaseClient_2(tempName);
+        //String tempName = (attacker.getCodename() + " hit " + defender.getCodename() + "!");
+        //baseClient = new udpBaseClient_2(tempName);
         int score = attacker.getScore();
         score += HIT_SCORE_INCREMENT;
         attacker.setScore(score);
+        updateDisplay();
     }
 
     //Use this whenever a player hits the base
-    public void playerHitBase(int attacker_id) throws IOException{
+    public void playerHitBase(int attacker_id){
         Player attacker = null;
         for(int i = 0; i < team1_players.size(); i++){
-            if(team1_players.get(i).getId() == attacker_id){
+            if(team1_players.get(i).getEquipID() == attacker_id){
                 attacker = team1_players.get(i);
             }
         }
         for(int i = 0; i < team2_players.size(); i++){
-            if(team2_players.get(i).getId() == attacker_id){
+            if(team2_players.get(i).getEquipID() == attacker_id){
                 attacker = team2_players.get(i);
             }
         }
@@ -182,9 +218,10 @@ public class PlayActionTable {
         attacker.setScore(attacker.getScore() + BASE_SCORE_INCREMENT);
         
         log.add(attacker.getCodename() + " hit the base!");
-        String tempNameTwo = (attacker.getCodename() + " hit the base!");
+        //String tempNameTwo = (attacker.getCodename() + " hit the base!");
         //Temporary Name
-        baseClient = new udpBaseClient_2(tempNameTwo);
+        //baseClient = new udpBaseClient_2(tempNameTwo);
+        updateDisplay();
     }
 
     public void sortByScore(){
@@ -257,18 +294,26 @@ public class PlayActionTable {
 
     }
 
+    public boolean isGameOver(){
+        return gameTimer.isFinished();
+    }
+
+    public void close(){
+        frame.dispose();
+    }
+
 	
 
     
     //test
-    /*public static void main(String[] args){
+    public static void main(String[] args){
         ArrayList<Player> team1 = new ArrayList<>();
         ArrayList<Player> team2 = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
-            team1.add(new Player(i, "Player " + i));
+            team1.add(new Player(i, "Player " + i, i));
         }
         for (int i = 5; i < 10; i++) {
-            team2.add(new Player(i, "Player " + i));
+            team2.add(new Player(i, "Player " + i, i));
         }
         PlayActionTable playActionTable = new PlayActionTable(team1, team2);
         playActionTable.display();
@@ -288,6 +333,6 @@ public class PlayActionTable {
             playActionTable.playerHitPlayer(attacker, defender);
             playActionTable.updateDisplay();
         }
-    }*/
+    }
 
 }

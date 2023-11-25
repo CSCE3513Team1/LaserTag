@@ -7,6 +7,9 @@ Pull from the repository and navigate to the directory you've placed it in.
 Run:  
 > javac \*java  
 > java -cp ".;lib/*" Main  
+  
+If you want to test the program with sample UDP traffic, first run traffictester.py.  
+Ensure that you enter the same equipment IDs in traffictester.py and the main program.  
 
 USAGE INSTRUCTIONS
 -

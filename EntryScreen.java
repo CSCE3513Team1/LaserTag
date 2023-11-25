@@ -232,7 +232,7 @@ public class EntryScreen extends JFrame implements ActionListener
                 }
                 else
                 {
-                    Player player = new Player(this.iD, this.codeName);
+                    Player player = new Player(this.iD, this.codeName, this.equipID);
                     if(this.team.toLowerCase().equals("red"))
                     {
                         redTeam.add(player);

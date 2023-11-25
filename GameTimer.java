@@ -30,6 +30,7 @@ public class GameTimer extends JPanel{
                 } else {
                     // Countdown has reached zero
                     label.setText(endDisplay);
+                    setSecondsRemaining(0);
                     timer.stop(); // Stop the timer when countdown reaches zero
                 }
             }
@@ -67,6 +68,10 @@ public class GameTimer extends JPanel{
                 e.printStackTrace();
             }
         }
+    }
+
+    public boolean isFinished() {
+        return secondsRemaining == 0;
     }
     
 }
