@@ -7,7 +7,6 @@ import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
-import javax.swing.ActionMap;
 import javax.swing.InputMap;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,7 +14,6 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 
 public class EntryScreen extends JFrame implements ActionListener
@@ -335,6 +333,7 @@ public class EntryScreen extends JFrame implements ActionListener
 		// Step 3 : invoke the send call to actually send
 		// the data.
 		ds.send(DpSend);
+        ds.close();
 	}
 
     public ArrayList<ArrayList<Player>> waitForPlayerEntry()

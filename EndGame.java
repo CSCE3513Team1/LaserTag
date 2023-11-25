@@ -3,9 +3,6 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.io.IOException;
-import java.lang.String;
 
 public class EndGame
 {
@@ -45,7 +42,6 @@ public class EndGame
                 e.printStackTrace();
             }
         }
-        //dispose of frame
         frame.dispose();
     }
 }

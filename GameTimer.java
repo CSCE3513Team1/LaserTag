@@ -4,6 +4,9 @@ import java.awt.event.ActionListener;
 import javax.swing.JPanel;
 
 
+//NOTE: Because of the way this is set up, we can't have multiple timers running at once
+//I'm not going to fix it since we won't need it but keep it in mind
+
 public class GameTimer extends JPanel{
     private static int secondsRemaining; // Initial countdown value
     private static Timer timer;

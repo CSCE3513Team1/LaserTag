@@ -1,5 +1,4 @@
 import java.awt.*;
-import java.io.IOException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
@@ -47,8 +46,6 @@ public class PlayActionTable {
         //add players to table
 
         table_size = Math.max(team1_players.size(), team2_players.size()) + 1;
-        //log_start = team_size + 2;
-        //table_size = team_size + 2 + LOG_SIZE;
         String[] columns = {"red_hit", "red_playername", "red_score", "green_hit", "green_playername", "green_score"};
         String[][] data = new String[table_size][6];
         data[0][0] = "";
@@ -87,8 +84,8 @@ public class PlayActionTable {
         GameTimer startTimer = new GameTimer(18, "Game Starts In: ", "Start!");
         //GameTimer startTimer = new GameTimer(3, "Game Starts In: ", "Start!");
         
-        //Gets value of time from GameTimer
-        swapOut = startTimer.getSecondsRemaining() + 1;
+        //Gets value of time from GameTimer. One second is added to give time for 'Start!' to display
+        swapOut = GameTimer.getSecondsRemaining() + 1;
         
         //add table to panel
         panel.setLayout(new BorderLayout());
@@ -98,22 +95,13 @@ public class PlayActionTable {
 
         frame.add(panel);
         
-        //add in GameTimer to the panel
-        //panelTwo.add(gameTimer);
-       
-        //add panel to frame 
-        //frame.add(panelTwo);
-        
-        //set frame properties
-        //frame.setSize(550, 200);
         //determine framze size by the number of players
         frame.setSize(550, 160 + (table_size * 15));
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
         
-        //gets countdown from GameTimer and when finished swap out
-        //Jpanels from countdown to actionTable
+        //Wait for the duration of the countdown timer
         try {
             Thread.sleep(swapOut * delay);    
         } catch (InterruptedException e) {
@@ -129,6 +117,7 @@ public class PlayActionTable {
         });
         flashingTimer.start();
         
+        //Set up a new timer for the game
         gameTimer = new GameTimer(360, "Time Remaining: ", "Time's Up!");
         //gameTimer = new GameTimer(10, "Time Remaining: ", "Time's Up!");
     }
@@ -229,7 +218,7 @@ public class PlayActionTable {
         this.team2_players.sort((p1, p2) -> p2.getScore() - p1.getScore());
     }
 
-    //Use this within a clock cycle to update the display. This is most likely pretty inefficient and slow
+    //This will be called automatically every time a player hits a player or the base, but can also be called manually
     public void updateDisplay(){
         //update table
         //this code should probably be cleaned to use the same table eventually instead of making a new one every update
@@ -276,7 +265,7 @@ public class PlayActionTable {
         if (log_start_index < 0) {
             log_start_index = 0;
         }
-        //if less than LOG_SIZE lines, add blank lines
+        //if less than LOG_SIZE lines, add blank lines. This is to keep the size of the log consistent
         for(int i = 0; i < LOG_SIZE - log.size(); i++){
             log_text.append("\n");
         }
@@ -300,7 +289,6 @@ public class PlayActionTable {
 
     public void close(){
         frame.dispose();
-        //end music
         gameMusic.stop();
     }
 
