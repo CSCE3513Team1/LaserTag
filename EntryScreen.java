@@ -106,6 +106,7 @@ public class EntryScreen extends JFrame implements ActionListener
         public void actionPerformed(ActionEvent e)
         {
             System.out.println("f5");
+	    frame.dispose();
             gameState = -1;
         }
     }

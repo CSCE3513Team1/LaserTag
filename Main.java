@@ -22,5 +22,6 @@ public class Main
         }
 		//Creates a GameAction Object
 		GameAction.RunGame();
+		EndGame endGame = new EndGame();
 	}
 }
