@@ -13,6 +13,7 @@ public class GameAction {
 		//Creates an ArrayList of Players for each team
 		ArrayList<ArrayList<Player>> teams = entryScreen.waitForPlayerEntry();
 		//Creats playActionTable Object and Puts entryScreen Team inside the playActionTable
+		entryScreen.close();
 		PlayActionTable playActionTable = new PlayActionTable(teams.get(0), teams.get(1));
 		//Displays playActionTable
 		playActionTable.display();
@@ -72,7 +73,7 @@ public class GameAction {
 		}
 		udpSender.SendMessage("221");
 		//close playActionTable
-		//playActionTable.close();
+		playActionTable.close();
 		udpListenerThread.interrupt();
 		return;
 		/*

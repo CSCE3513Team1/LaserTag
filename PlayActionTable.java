@@ -130,7 +130,7 @@ public class PlayActionTable {
         flashingTimer.start();
         
         gameTimer = new GameTimer(360, "Time Remaining: ", "Time's Up!");
-        //gameTimer = new GameTimer(30, "Time Remaining: ", "Time's Up!");
+        //gameTimer = new GameTimer(10, "Time Remaining: ", "Time's Up!");
     }
     
     
@@ -300,13 +300,15 @@ public class PlayActionTable {
 
     public void close(){
         frame.dispose();
+        //end music
+        gameMusic.stop();
     }
 
 	
 
     
     //test
-    public static void main(String[] args){
+    /*public static void main(String[] args){
         ArrayList<Player> team1 = new ArrayList<>();
         ArrayList<Player> team2 = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
@@ -333,6 +335,6 @@ public class PlayActionTable {
             playActionTable.playerHitPlayer(attacker, defender);
             playActionTable.updateDisplay();
         }
-    }
+    }*/
 
 }

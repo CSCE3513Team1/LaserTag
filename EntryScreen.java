@@ -94,7 +94,7 @@ public class EntryScreen extends JFrame implements ActionListener
         @Override
         public void actionPerformed(ActionEvent e)
         {
-            System.out.println("f3");
+            //System.out.println("f3");
             gameState = 5;
             update();
         }
@@ -105,7 +105,7 @@ public class EntryScreen extends JFrame implements ActionListener
         @Override
         public void actionPerformed(ActionEvent e)
         {
-            System.out.println("f5");
+            //System.out.println("f5");
 	    frame.dispose();
             gameState = -1;
         }
@@ -116,15 +116,15 @@ public class EntryScreen extends JFrame implements ActionListener
         @Override
         public void actionPerformed(ActionEvent e)
         {
-            System.out.println("f12");
-            System.out.println(redTeam.toString());
-            System.out.println(greenTeam.toString());
+            //System.out.println("f12");
+            //System.out.println(redTeam.toString());
+            //System.out.println(greenTeam.toString());
             redTeam.clear();
             greenTeam.clear();
             gameState = 0;
             enterID();
-            System.out.println(redTeam.toString());
-            System.out.println(greenTeam.toString());
+            //System.out.println(redTeam.toString());
+            //System.out.println(greenTeam.toString());
         }
     }
 
@@ -135,13 +135,13 @@ public class EntryScreen extends JFrame implements ActionListener
 
     public void update()
     {
-        System.out.println("Button Pressed");
+        //System.out.println("Button Pressed");
 
         this.database.connect();
-        System.out.println("test");
+        //System.out.println("test");
         
         this.gameState++;
-        System.out.println(this.gameState);
+        //System.out.println(this.gameState);
         if(this.gameState == 0)
         {
             this.enterID();
@@ -155,14 +155,14 @@ public class EntryScreen extends JFrame implements ActionListener
                 {
                     this.iD = this.database.getNewPlayerID();
                     
-                    System.out.println("Player not found. New ID given: " + this.iD);
+                    //System.out.println("Player not found. New ID given: " + this.iD);
                     this.enterCodeName();
                 }
                 else
                 {
                     this.codeName = this.database.searchByID(this.iD).getCodename();
                     this.exists = true;
-                    System.out.println("Player has been found. Your codename is " + this.codeName);
+                    //System.out.println("Player has been found. Your codename is " + this.codeName);
                     gameState++;
                     this.enterEquipID();
                 }
@@ -170,7 +170,7 @@ public class EntryScreen extends JFrame implements ActionListener
             }
             catch(NumberFormatException exc)
             {
-                System.out.println("Enter an integer");
+                //System.out.println("Enter an integer");
                 this.iDText.setText("");
                 this.gameState = 0;
             }
@@ -191,7 +191,7 @@ public class EntryScreen extends JFrame implements ActionListener
             }
             catch(NumberFormatException exc)
             {
-                System.out.println("Enter a string");
+                //System.out.println("Enter a string");
                 this.gameState = 1;
             }
             
@@ -216,7 +216,7 @@ public class EntryScreen extends JFrame implements ActionListener
             }
             catch(NumberFormatException exc)
             {
-                System.out.println("Enter an integer");
+                //System.out.println("Enter an integer");
                 this.iDText.setText("");
                 this.gameState = 2;
             }
@@ -228,7 +228,7 @@ public class EntryScreen extends JFrame implements ActionListener
                 this.team = this.iDText.getText();
                 if(!(this.team.toLowerCase().equals("red")) && !(this.team.toLowerCase().equals("green")))
                 {
-                    System.out.println("Enter red or green" + this.team.toLowerCase());
+                    //System.out.println("Enter red or green" + this.team.toLowerCase());
                     this.gameState = 3;
                 }
                 else
@@ -259,7 +259,7 @@ public class EntryScreen extends JFrame implements ActionListener
             }
             catch(NumberFormatException exc)
             {
-                System.out.println("Enter red or green exception");
+                //System.out.println("Enter red or green exception");
                 this.iDText.setText("");
                 this.gameState = 3;
             }
@@ -268,7 +268,7 @@ public class EntryScreen extends JFrame implements ActionListener
         database.disconnect();
 
         
-        System.out.println(this.gameState);
+        //System.out.println(this.gameState);
 
         if(this.gameState == 6)
         {
@@ -321,16 +321,16 @@ public class EntryScreen extends JFrame implements ActionListener
 		InetAddress ip = InetAddress.getLocalHost();
 		byte buf[] = null;
 
-        System.out.println("transmit");
+        //System.out.println("transmit");
 		
 		String inp = info;
-		//System.out.println("This is inp: " + inp);
+		////System.out.println("This is inp: " + inp);
 		// convert the String input into the byte array.
 		//buf = ByteBuffer.allocate(Integer.BYTES).putInt(inp).array();
         buf = inp.getBytes();
 		// Step 2 : Create the datagramPacket for sending
 		// the data.
-		//System.out.println("This is buf: " + buf);
+		////System.out.println("This is buf: " + buf);
 		DatagramPacket DpSend = new DatagramPacket(buf, buf.length, ip, 7500);
 		// Step 3 : invoke the send call to actually send
 		// the data.
@@ -354,5 +354,10 @@ public class EntryScreen extends JFrame implements ActionListener
         teams.add(redTeam);
         teams.add(greenTeam);
         return teams;
+    }
+
+    public void close()
+    {
+        this.frame.dispose();
     }
 }

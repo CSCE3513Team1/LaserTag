@@ -48,15 +48,7 @@ public class GameMusic {
         }
     }
 
-    private void closeResources() {
-        //says the try catch is unreachable and freezes for some reason
-        //try {
-            //if (player != null) 
-            //{
-                player.close();
-           // }
-        //} catch (IOException e) {
-           // e.printStackTrace();
-        //}
+    public void stop() {
+        player.close();
     }
 }

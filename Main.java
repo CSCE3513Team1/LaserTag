@@ -21,7 +21,10 @@ public class Main
             e.printStackTrace();
         }
 		//Creates a GameAction Object
-		GameAction.RunGame();
-		EndGame endGame = new EndGame();
+		while(true){
+			GameAction.RunGame();
+			EndGame endGame = new EndGame();
+			endGame.waitForButtonPress();
+		}
 	}
 }

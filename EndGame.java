@@ -9,27 +9,22 @@ import java.lang.String;
 
 public class EndGame
 {
+    private boolean buttonClicked = false;
+    JFrame frame;
+    JPanel panel;
     
     EndGame()
     {
-        JFrame frame = new JFrame("Swing Button Example");
-        JPanel panel = new JPanel();
+        frame = new JFrame("Swing Button Example");
+        panel = new JPanel();
 
         JButton button = new JButton();
-        button.setText("End Game");
+        button.setText("Play Again");
         button.setBounds(500, 500, 200, 200);
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("Button Clicked!");
-                frame.dispose();
-                try{
-                    GameAction gameAction1 = new GameAction();
-                }catch(IOException n) {
-                    n.printStackTrace();
-                }
-                
-
+                buttonClicked = true;
             }
         });
 
@@ -39,5 +34,18 @@ public class EndGame
         frame.setBounds(675, 150, 200, 100);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
+    }
+    public void waitForButtonPress()
+    {
+        while (!buttonClicked)
+        {
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        //dispose of frame
+        frame.dispose();
     }
 }
