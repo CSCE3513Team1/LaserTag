@@ -3,11 +3,14 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.InputMap;
+
+import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
@@ -37,7 +40,9 @@ public class EntryScreen extends JFrame implements ActionListener
     static String info = "";
     ArrayList<Player> greenTeam;
     ArrayList<Player> redTeam;
-
+    JTable table;
+    int table_size = 16;
+    static int ROW_HEIGHT = 15;
 
     EntryScreen()
     {
@@ -57,10 +62,10 @@ public class EntryScreen extends JFrame implements ActionListener
         iDText = new JTextField();
         button = new JButton("Submit");
 
-        this.frame.setSize(350, 200);
-        this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.frame.setVisible(true);
-        this.frame.add(this.panel);
+        // this.frame.setSize(350, 200);
+        // this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        // this.frame.setVisible(true);
+        // this.frame.add(this.panel);
 
         InputMap iMap = panel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
 
@@ -82,21 +87,35 @@ public class EntryScreen extends JFrame implements ActionListener
         this.button.addActionListener(this);
         this.panel.add(this.button);
         
-        this.panel.setLayout(null);
+        this.panel.setLayout(new BorderLayout());
+
+        String[] columns = {"red_id", "red_playername", "red_equipID", "green_id", "green_playername", "green_equipID"};
+        String[][] data = new String[table_size][6];
+        data[0][0] = "ID";
+        data[0][1] = "Red Team";
+        data[0][2] = "Equipment ID";
+        data[0][3] = "ID";
+        data[0][4] = "Green Team";
+        data[0][5] = "Equipment ID";
+        table = new JTable(data, columns) 
+        {
+            public boolean isCellEditable(int row, int column)
+            {
+                return false;
+            };
+        };
+
+        table.setRowHeight(ROW_HEIGHT);
+        this.panel.add(table, BorderLayout.SOUTH);
+
+        this.frame.add(this.panel);
+
+        this.frame.setSize(550, 160 + (table_size * 15));
+        this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.frame.setVisible(true);
 
         this.enterID();
     }
-
-    /*public class Exit extends AbstractAction
-    {
-        @Override
-        public void actionPerformed(ActionEvent e)
-        {
-            //System.out.println("f3");
-            gameState = 5;
-            update();
-        }
-    }*/
 
     public class Play extends AbstractAction
     {
@@ -117,6 +136,7 @@ public class EntryScreen extends JFrame implements ActionListener
             //System.out.println("f12");
             //System.out.println(redTeam.toString());
             //System.out.println(greenTeam.toString());
+            clearTable();
             redTeam.clear();
             greenTeam.clear();
             gameState = 0;
@@ -235,10 +255,12 @@ public class EntryScreen extends JFrame implements ActionListener
                     if(this.team.toLowerCase().equals("red"))
                     {
                         redTeam.add(player);
+                        updateTable(player, redTeam.size(), "red");
                     }
                     if(this.team.toLowerCase().equals("green"))
                     {
                         greenTeam.add(player);
+                        updateTable(player, greenTeam.size(), "green");
                     }
 
                     this.gameState = 0;
@@ -335,6 +357,38 @@ public class EntryScreen extends JFrame implements ActionListener
 		ds.send(DpSend);
         ds.close();
 	}
+
+    public void updateTable(Player player, int size, String team)
+    {
+        if(team == "red")
+        {
+            table.setValueAt(String.valueOf(player.getId()), size, 0);
+            table.setValueAt(player.getCodename(), size, 1);
+            table.setValueAt(String.valueOf(player.getEquipID()), size, 2);
+        }
+        else
+        {
+            table.setValueAt(String.valueOf(player.getId()), size, 3);
+            table.setValueAt(player.getCodename(), size, 4);
+            table.setValueAt(String.valueOf(player.getEquipID()), size, 5);
+        }
+    }
+
+    public void clearTable()
+    {
+        for(int i = 1; i <= redTeam.size(); i++)
+        {
+            table.setValueAt("", i, 0);
+            table.setValueAt("", i, 1);
+            table.setValueAt("", i, 2);
+        }
+        for(int i = 1; i <= greenTeam.size(); i++)
+        {
+            table.setValueAt("", i, 3);
+            table.setValueAt("", i, 4);
+            table.setValueAt("", i, 5);
+        }
+    }
 
     public ArrayList<ArrayList<Player>> waitForPlayerEntry()
     {
