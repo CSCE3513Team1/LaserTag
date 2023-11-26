@@ -35,6 +35,10 @@ public class UDPListener implements Runnable
 		return queue.isEmpty();
 	}
 
+	public void close(){
+		ds.close();
+	}
+
     @Override
     public void run()
     {

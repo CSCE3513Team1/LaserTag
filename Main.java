@@ -17,8 +17,6 @@ public class Main
 		//Run the game
 		while(true){
 			GameAction.RunGame();
-			EndGame endGame = new EndGame();
-			endGame.waitForButtonPress();
 		}
 	}
 }

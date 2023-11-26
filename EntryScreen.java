@@ -173,14 +173,14 @@ public class EntryScreen extends JFrame implements ActionListener
                 {
                     this.iD = this.database.getNewPlayerID();
                     
-                    //System.out.println("Player not found. New ID given: " + this.iD);
+                    System.out.println("Player not found. New ID given: " + this.iD);
                     this.enterCodeName();
                 }
                 else
                 {
                     this.codeName = this.database.searchByID(this.iD).getCodename();
                     this.exists = true;
-                    //System.out.println("Player has been found. Your codename is " + this.codeName);
+                    System.out.println("Player has been found. Your codename is " + this.codeName);
                     gameState++;
                     this.enterEquipID();
                 }
@@ -188,7 +188,7 @@ public class EntryScreen extends JFrame implements ActionListener
             }
             catch(NumberFormatException exc)
             {
-                //System.out.println("Enter an integer");
+                System.out.println("Enter an integer");
                 this.iDText.setText("");
                 this.gameState = 0;
             }
@@ -209,7 +209,7 @@ public class EntryScreen extends JFrame implements ActionListener
             }
             catch(NumberFormatException exc)
             {
-                //System.out.println("Enter a string");
+                System.out.println("Enter a string");
                 this.gameState = 1;
             }
             
@@ -234,7 +234,7 @@ public class EntryScreen extends JFrame implements ActionListener
             }
             catch(NumberFormatException exc)
             {
-                //System.out.println("Enter an integer");
+                System.out.println("Enter an integer");
                 this.iDText.setText("");
                 this.gameState = 2;
             }
@@ -246,7 +246,7 @@ public class EntryScreen extends JFrame implements ActionListener
                 this.team = this.iDText.getText();
                 if(!(this.team.toLowerCase().equals("red")) && !(this.team.toLowerCase().equals("green")))
                 {
-                    //System.out.println("Enter red or green" + this.team.toLowerCase());
+                    System.out.println("Enter red or green" + this.team.toLowerCase());
                     this.gameState = 3;
                 }
                 else

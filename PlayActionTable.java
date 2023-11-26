@@ -27,6 +27,8 @@ public class PlayActionTable {
     Timer flashingTimer;
     int topRedScore = -1;
     int topGreenScore = -1;
+    int totalRedScore = 0;
+    int totalGreenScore = 0;
     boolean flashOn = true;
     UDPSender baseClient;
     
@@ -38,14 +40,12 @@ public class PlayActionTable {
 
     public void display(){
         //create jtable
-        gameMusic = new GameMusic();
-	    gameMusic.playRandomTrack();
         frame = new JFrame();
         panel = new JPanel();
         gameTimer = null;
         //add players to table
 
-        table_size = Math.max(team1_players.size(), team2_players.size()) + 1;
+        table_size = Math.max(team1_players.size(), team2_players.size()) + 2;
         String[] columns = {"red_hit", "red_playername", "red_score", "green_hit", "green_playername", "green_score"};
         String[][] data = new String[table_size][6];
         data[0][0] = "";
@@ -58,10 +58,14 @@ public class PlayActionTable {
             data[i][1] = team1_players.get(i-1).getCodename();
             data[i][2] = "0";
         }
+        data[team1_players.size()+1][1] = "TOTAL";
+        data[team1_players.size()+1][2] = "0";
         for(int i = 1; i < team2_players.size() + 1; i++) {
             data[i][4] = team2_players.get(i-1).getCodename();
             data[i][5] = "0";
         }
+        data[team2_players.size()+1][4] = "TOTAL";
+        data[team2_players.size()+1][5] = "0";
         table = new JTable(data, columns) {
             public boolean isCellEditable(int row, int column) {                
                 return false; 
@@ -81,8 +85,8 @@ public class PlayActionTable {
         }
         
         //Reference to GameTimer
-        GameTimer startTimer = new GameTimer(18, "Game Starts In: ", "Start!");
-        //GameTimer startTimer = new GameTimer(3, "Game Starts In: ", "Start!");
+        //GameTimer startTimer = new GameTimer(30, "Game Starts In: ", "Start!");
+        GameTimer startTimer = new GameTimer(3, "Game Starts In: ", "Start!");
         
         //Gets value of time from GameTimer. One second is added to give time for 'Start!' to display
         swapOut = GameTimer.getSecondsRemaining() + 1;
@@ -100,6 +104,19 @@ public class PlayActionTable {
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
+
+
+        if (swapOut > 19) {
+            try {
+                Thread.sleep((swapOut-19) * delay);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            swapOut = 19;
+        }
+
+        gameMusic = new GameMusic();
+	    gameMusic.playRandomTrack();
         
         //Wait for the duration of the countdown timer
         try {
@@ -118,8 +135,8 @@ public class PlayActionTable {
         flashingTimer.start();
         
         //Set up a new timer for the game
-        gameTimer = new GameTimer(360, "Time Remaining: ", "Time's Up!");
-        //gameTimer = new GameTimer(10, "Time Remaining: ", "Time's Up!");
+        //gameTimer = new GameTimer(360, "Time Remaining: ", "Time's Up!");
+        gameTimer = new GameTimer(10, "Time Remaining: ", "Time's Up!");
     }
     
     
@@ -164,6 +181,7 @@ public class PlayActionTable {
         for(int i = 0; i < team1_players.size(); i++){
             if(team1_players.get(i).getEquipID() == attacker_id){
                 attacker = team1_players.get(i);
+                totalRedScore += HIT_SCORE_INCREMENT;
             }
             if(team1_players.get(i).getEquipID() == defender_id){
                 defender = team1_players.get(i);
@@ -172,6 +190,7 @@ public class PlayActionTable {
         for(int i = 0; i < team2_players.size(); i++){
             if(team2_players.get(i).getEquipID() == attacker_id){
                 attacker = team2_players.get(i);
+                totalGreenScore += HIT_SCORE_INCREMENT;
             }
             if(team2_players.get(i).getEquipID() == defender_id){
                 defender = team2_players.get(i);
@@ -196,11 +215,13 @@ public class PlayActionTable {
         for(int i = 0; i < team1_players.size(); i++){
             if(team1_players.get(i).getEquipID() == attacker_id){
                 attacker = team1_players.get(i);
+                totalRedScore += BASE_SCORE_INCREMENT;
             }
         }
         for(int i = 0; i < team2_players.size(); i++){
             if(team2_players.get(i).getEquipID() == attacker_id){
                 attacker = team2_players.get(i);
+                totalGreenScore += BASE_SCORE_INCREMENT;
             }
         }
         attacker.setHitBase(true);
@@ -241,6 +262,8 @@ public class PlayActionTable {
             data[i][1] = team1_players.get(i-1).getCodename();
             data[i][2] = String.valueOf(team1_players.get(i-1).getScore());
         }
+        data[team1_players.size()+1][1] = "TOTAL";
+        data[team1_players.size()+1][2] = String.valueOf(totalRedScore);
         for(int i = 1; i < team2_players.size() + 1; i++) {
             if (team2_players.get(i-1).getHitBase()) {
                 data[i][3] = "B";
@@ -251,6 +274,8 @@ public class PlayActionTable {
             data[i][4] = team2_players.get(i-1).getCodename();
             data[i][5] = String.valueOf(team2_players.get(i-1).getScore());
         }
+        data[team2_players.size()+1][4] = "TOTAL";
+        data[team2_players.size()+1][5] = String.valueOf(totalGreenScore);
 
         table = new JTable(data, columns) {
             public boolean isCellEditable(int row, int column) {                

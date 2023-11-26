@@ -59,17 +59,21 @@ public class GameAction {
 			}
 		}
 		//wait for 3 seconds. This is to prevent the screen from closing too fast
-		try {
+		/*try {
 			Thread.sleep(3000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
-		}
+		}*/
 		udpSender.SendMessage("221");
 		udpSender.SendMessage("221");
 		udpSender.SendMessage("221");
-		//close everything and return
-		playActionTable.close();
+
+		//set up end of game prompts
 		udpListenerThread.interrupt();
+		udpListener.close();
+		EndGame endGame = new EndGame();
+		endGame.waitForButtonPress();
+		playActionTable.close();
 		return;
 	}
 }

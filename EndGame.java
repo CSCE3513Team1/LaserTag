@@ -25,7 +25,18 @@ public class EndGame
             }
         });
 
+        JButton exitbutton = new JButton();
+        exitbutton.setText("Exit Game");
+        exitbutton.setBounds(500, 500, 200, 200);
+        exitbutton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0);
+            }
+        });
+
         panel.add(button);
+        panel.add(exitbutton);
         frame.add(panel);
 
         frame.setBounds(675, 150, 200, 100);
