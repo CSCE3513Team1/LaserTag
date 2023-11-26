@@ -65,6 +65,8 @@ public class GameAction {
 			e.printStackTrace();
 		}
 		udpSender.SendMessage("221");
+		udpSender.SendMessage("221");
+		udpSender.SendMessage("221");
 		//close everything and return
 		playActionTable.close();
 		udpListenerThread.interrupt();
