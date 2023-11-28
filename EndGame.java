@@ -12,7 +12,7 @@ public class EndGame
     
     EndGame()
     {
-        frame = new JFrame("Swing Button Example");
+        frame = new JFrame("End Game Button");
         panel = new JPanel();
 
         JButton button = new JButton();
