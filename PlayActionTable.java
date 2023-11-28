@@ -85,8 +85,8 @@ public class PlayActionTable {
         }
         
         //Reference to GameTimer
-        //GameTimer startTimer = new GameTimer(30, "Game Starts In: ", "Start!");
-        GameTimer startTimer = new GameTimer(3, "Game Starts In: ", "Start!");
+        GameTimer startTimer = new GameTimer(30, "Game Starts In: ", "Start!");
+        //GameTimer startTimer = new GameTimer(3, "Game Starts In: ", "Start!");
         
         //Gets value of time from GameTimer. One second is added to give time for 'Start!' to display
         swapOut = GameTimer.getSecondsRemaining() + 1;
@@ -135,8 +135,8 @@ public class PlayActionTable {
         flashingTimer.start();
         
         //Set up a new timer for the game
-        //gameTimer = new GameTimer(360, "Time Remaining: ", "Time's Up!");
-        gameTimer = new GameTimer(10, "Time Remaining: ", "Time's Up!");
+        gameTimer = new GameTimer(360, "Time Remaining: ", "Time's Up!");
+        //gameTimer = new GameTimer(10, "Time Remaining: ", "Time's Up!");
     }
     
     
